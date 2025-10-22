@@ -1,0 +1,131 @@
+===============================================
+HOW TO FIX PYTHON PATH ON WINDOWS
+===============================================
+
+PROBLEM:
+--------
+When you type "pip" in PowerShell/Command Prompt, you get:
+"pip is not recognized as the name of a cmdlet, function, script file..."
+
+This means Python's Scripts folder is not in your PATH.
+
+
+AUTOMATED FIX (RECOMMENDED):
+---------------------------
+1. Double-click "check_python_path.bat" to diagnose the issue
+2. Double-click "fix_path.bat" to automatically fix it
+3. Close and reopen PowerShell/Command Prompt
+4. Type: pip --version
+5. Should work now!
+
+
+MANUAL FIX (If automated fix doesn't work):
+-------------------------------------------
+
+STEP 1: Find Your Python Installation Path
+-------------------------------------------
+Open PowerShell and run ONE of these:
+
+   python -c "import sys; print(sys.executable)"
+   
+   OR if that doesn't work:
+   
+   py -c "import sys; print(sys.executable)"
+
+You'll get something like:
+   C:\Users\YourName\AppData\Local\Programs\Python\Python312\python.exe
+
+The Python directory is:
+   C:\Users\YourName\AppData\Local\Programs\Python\Python312
+
+The Scripts directory is:
+   C:\Users\YourName\AppData\Local\Programs\Python\Python312\Scripts
+
+
+STEP 2: Add to PATH Manually
+-----------------------------
+
+Method A - Using Windows Settings (Windows 10/11):
+1. Press Windows key + type "environment variables"
+2. Click "Edit environment variables for your account"
+3. In the "User variables" section, find and select "Path"
+4. Click "Edit..."
+5. Click "New"
+6. Add the Python directory (e.g., C:\Users\...\Python312)
+7. Click "New" again
+8. Add the Scripts directory (e.g., C:\Users\...\Python312\Scripts)
+9. Click "OK" on all windows
+10. Close and reopen PowerShell/Command Prompt
+
+
+Method B - Using PowerShell (Temporary for current session):
+Run these commands in PowerShell:
+
+   $env:Path += ";C:\Users\YourName\AppData\Local\Programs\Python\Python312"
+   $env:Path += ";C:\Users\YourName\AppData\Local\Programs\Python\Python312\Scripts"
+
+Replace the paths with your actual Python paths from Step 1.
+Note: This only works for the current PowerShell window.
+
+
+Method C - Using setx (Permanent):
+Open Command Prompt and run:
+
+   setx PATH "%PATH%;C:\Users\YourName\AppData\Local\Programs\Python\Python312;C:\Users\YourName\AppData\Local\Programs\Python\Python312\Scripts"
+
+Replace the paths with your actual Python paths from Step 1.
+Close and reopen Command Prompt/PowerShell.
+
+
+STEP 3: Verify the Fix
+-----------------------
+1. Close ALL PowerShell/Command Prompt windows
+2. Open a NEW PowerShell or Command Prompt window
+3. Type: pip --version
+4. You should see: pip X.X.X from C:\Users\...\Python312\Lib\site-packages\pip
+
+If it still doesn't work, try logging out and back in, or restart your computer.
+
+
+STILL NOT WORKING?
+------------------
+If pip still doesn't work after trying the above:
+
+Workaround 1: Use "python -m pip" instead of "pip"
+   python -m pip install -r requirements.txt
+   python -m pip install PyPDF2 reportlab
+
+Workaround 2: Use the py launcher
+   py -m pip install -r requirements.txt
+
+Workaround 3: Reinstall Python
+   1. Download Python from https://www.python.org/downloads/
+   2. Run installer
+   3. ✓✓✓ CHECK "Add Python to PATH" (IMPORTANT!)
+   4. Choose "Customize installation"
+   5. Make sure "pip" is selected
+   6. Complete installation
+
+
+VERIFY YOUR CURRENT PATH:
+-------------------------
+To see your current PATH in PowerShell:
+   $env:Path -split ';'
+
+To see your current PATH in Command Prompt:
+   echo %PATH%
+
+
+COMMON PYTHON INSTALLATION LOCATIONS:
+--------------------------------------
+C:\Users\<YourName>\AppData\Local\Programs\Python\Python3XX\
+C:\Python3XX\
+C:\Program Files\Python3XX\
+C:\Users\<YourName>\AppData\Local\Microsoft\WindowsApps\
+
+
+NEED MORE HELP?
+---------------
+Run "check_python_path.bat" to get diagnostic information
+about your Python installation and PATH settings.
+
