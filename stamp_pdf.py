@@ -371,8 +371,8 @@ def _choose_stamp_position(input_pdf_path, page_index, page_width, page_height, 
         except Exception:
             pass
 
-    # Fallback: choose corner with least overlap if possible, else top-right
-    xv, yv = candidates_view[0]
+    # Fallback: choose corner with least overlap if possible, else bottom-right
+    xv, yv = candidates_view[2]
     try:
         if PYMUPDF_AVAILABLE:
             with fitz.open(input_pdf_path) as doc:
@@ -403,7 +403,8 @@ def _choose_stamp_position(input_pdf_path, page_index, page_width, page_height, 
                     s = 0.0
                     for (bx0, by0, bx1, by1) in text_rects:
                         s += ov(ax0, ay0, ax1, ay1, bx0, by0, bx1, by1)
-                    if s < best_score:
+                    # Tie-breaker: prefer bottom-right (index 2) when scores are equal
+                    if (s < best_score) or (s == best_score and i == 2):
                         best_idx, best_score = i, s
                 xv, yv = candidates_view[best_idx]
     except Exception:
